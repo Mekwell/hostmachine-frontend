@@ -85,7 +85,7 @@ export default function ServerDetailPage({ params }: { params: Promise<{ id: str
 
   const isProvisioning = server.status === 'PROVISIONING';
   const isOnline = ['LIVE', 'STARTING', 'RUNNING'].includes(server.status);
-  const isModdable = ['minecraft-forge', 'minecraft-fabric'].includes(server.gameType);
+  const isModdable = ['minecraft-forge', 'minecraft-fabric', 'minecraft-java'].includes(server.gameType);
   
   // Use public IP for client-side socket connection, assume port 3000 for now or env var
   const controllerUrl = process.env.NEXT_PUBLIC_CONTROLLER_URL || 'http://localhost:3000';
