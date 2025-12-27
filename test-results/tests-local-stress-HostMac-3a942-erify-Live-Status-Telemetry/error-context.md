@@ -1,0 +1,92 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - alert [ref=e2]
+  - generic [ref=e3]:
+    - complementary [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e6]:
+          - link "Host Machine" [ref=e7] [cursor=pointer]:
+            - /url: /
+            - img [ref=e9]
+            - generic [ref=e11]: Host Machine
+          - link "// Leave Dashboard" [ref=e12] [cursor=pointer]:
+            - /url: /
+        - generic [ref=e14]:
+          - img [ref=e16]
+          - generic [ref=e19]:
+            - img [ref=e21]
+            - generic [ref=e23]:
+              - generic [ref=e24]:
+                - heading "HostBot Intelligence" [level=4] [ref=e25]
+                - generic [ref=e26]: nominal
+              - paragraph [ref=e27]: All systems operating within parameters.
+        - link "NEW INSTANCE" [ref=e28] [cursor=pointer]:
+          - /url: /servers/new
+          - img [ref=e29]
+          - text: NEW INSTANCE
+        - navigation [ref=e31]:
+          - generic [ref=e32]: User Dashboard
+          - link "Dashboard" [ref=e33] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e34]
+            - text: Dashboard
+          - link "My Servers" [ref=e39] [cursor=pointer]:
+            - /url: /dashboard/servers
+            - img [ref=e40]
+            - text: My Servers
+          - link "Plan & Billing" [ref=e43] [cursor=pointer]:
+            - /url: /dashboard/plans
+            - img [ref=e44]
+            - text: Plan & Billing
+        - generic [ref=e47]:
+          - generic [ref=e48]: te
+          - generic [ref=e49]:
+            - paragraph [ref=e50]: test
+            - generic [ref=e51]: Online
+          - button "Logout" [ref=e53]:
+            - img [ref=e54]
+    - main [ref=e57]:
+      - generic [ref=e58]:
+        - generic [ref=e60]:
+          - img [ref=e61]
+          - textbox "Search your modules..." [ref=e64]
+        - button [ref=e66]:
+          - img [ref=e67]
+      - generic [ref=e72]:
+        - generic [ref=e73]:
+          - generic [ref=e74]:
+            - img [ref=e76]
+            - generic [ref=e80]:
+              - heading "Resource Pool" [level=2] [ref=e81]
+              - paragraph [ref=e82]: Allocation Monitoring
+          - generic [ref=e84]:
+            - generic [ref=e85]: RAM USAGE // 0%
+            - generic [ref=e86]: 0.0GB USED / 0.0GB TOTAL
+          - link "Upgrade Capacity" [ref=e88] [cursor=pointer]:
+            - /url: /dashboard/plans
+        - generic [ref=e89]:
+          - generic [ref=e90]:
+            - heading "My Modules." [level=1] [ref=e91]
+            - paragraph [ref=e92]: Personal System Grid
+          - generic [ref=e93]:
+            - button "RE-SCAN" [ref=e94]:
+              - img [ref=e95]
+              - text: RE-SCAN
+            - link "DEPLOY MODULE" [ref=e100] [cursor=pointer]:
+              - /url: /servers/new
+              - img [ref=e101]
+              - text: DEPLOY MODULE
+        - table [ref=e108]:
+          - rowgroup [ref=e109]:
+            - row "System Identity Connection Endpoint Operational Status Resource Load Controls" [ref=e110]:
+              - columnheader "System Identity" [ref=e111]
+              - columnheader "Connection Endpoint" [ref=e112]
+              - columnheader "Operational Status" [ref=e113]
+              - columnheader "Resource Load" [ref=e114]
+              - columnheader "Controls" [ref=e115]
+          - rowgroup [ref=e116]:
+            - row "Syncing system manifest..." [ref=e117]:
+              - cell "Syncing system manifest..." [ref=e118]
+```

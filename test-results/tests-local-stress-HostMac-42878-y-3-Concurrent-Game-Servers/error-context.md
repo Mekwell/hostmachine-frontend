@@ -1,0 +1,57 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - alert [ref=e2]
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - navigation [ref=e5]:
+        - link "HOSTMACHINE" [ref=e6] [cursor=pointer]:
+          - /url: /
+          - generic [ref=e7]: HOSTMACHINE
+        - generic [ref=e8]:
+          - link "Deploy Server" [ref=e9] [cursor=pointer]:
+            - /url: /servers/new
+            - text: Deploy Server
+            - img [ref=e10]
+          - button "Menu" [ref=e16]:
+            - img [ref=e17]
+            - generic [ref=e18]: Menu
+    - main [ref=e19]:
+      - generic [ref=e20]:
+        - generic [ref=e21]:
+          - generic [ref=e22]:
+            - img [ref=e24]
+            - generic [ref=e26]: Path
+          - generic [ref=e27]:
+            - generic [ref=e28]: "1"
+            - generic [ref=e29]: Game
+          - generic [ref=e30]:
+            - generic [ref=e31]: "2"
+            - generic [ref=e32]: Deployment
+          - generic [ref=e33]:
+            - generic [ref=e34]: "3"
+            - generic [ref=e35]: Configuration
+          - generic [ref=e36]:
+            - generic [ref=e37]: "4"
+            - generic [ref=e38]: Summary
+        - generic [ref=e39]:
+          - generic [ref=e41]:
+            - generic [ref=e42]:
+              - heading "Discovery Engine" [level=2] [ref=e43]
+              - generic [ref=e44] [cursor=pointer]:
+                - paragraph [ref=e45]:
+                  - text: Available
+                  - generic [ref=e46]: Games.
+                - img [ref=e48]
+              - paragraph [ref=e50]: Click title or arrow to cycle categories
+            - generic [ref=e51]:
+              - img [ref=e52]
+              - textbox "Search manifest..." [active] [ref=e55]: Minecraft
+          - generic [ref=e57]:
+            - button [ref=e58]:
+              - img [ref=e59]
+            - button "CONTINUE SEQUENCE" [disabled] [ref=e62]:
+              - text: CONTINUE SEQUENCE
+              - img [ref=e63]
+```
