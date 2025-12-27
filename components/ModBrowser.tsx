@@ -8,12 +8,13 @@ import { getMods, installMod, uninstallMod } from '@/app/actions';
 
 export default function ModBrowser({ serverId, gameType }: { serverId: string, gameType: string }) {
     const [search, setSearch] = useState("");
+    const [category, setCategory] = useState("project_type:mod");
     const [mods, setMods] = useState<any[]>([]);
     const [installed, setInstalled] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
     const [actionId, setActionId] = useState<string | null>(null);
 
-    const loaderType = gameType.includes('fabric') ? 'fabric' : (gameType.includes('forge') ? 'forge' : null);
+    const loaderType = gameType.includes('fabric') ? 'fabric' : (gameType.includes('forge') ? 'forge' : (gameType.includes('java') ? 'paper' : null));
 
     const fetchInstalled = useCallback(async () => {
         try {
@@ -26,8 +27,8 @@ export default function ModBrowser({ serverId, gameType }: { serverId: string, g
         if (!loaderType) return;
         setLoading(true);
         try {
-            const facets = JSON.stringify([[`categories:${loaderType}`], ["project_type:mod"]]);
-            const url = `https://api.modrinth.com/v2/search?query=${encodeURIComponent(query)}&facets=${encodeURIComponent(facets)}&limit=8`;
+            const facets = JSON.stringify([[`categories:${loaderType}`], [category]]);
+            const url = `https://api.modrinth.com/v2/search?query=${encodeURIComponent(query)}&facets=${encodeURIComponent(facets)}&limit=12`;
             const res = await fetch(url);
             const data = await res.json();
             setMods(data.hits || []);
@@ -35,13 +36,13 @@ export default function ModBrowser({ serverId, gameType }: { serverId: string, g
         } finally {
             setLoading(false);
         }
-    }, [loaderType]);
+    }, [loaderType, category]);
 
     useEffect(() => {
         fetchInstalled();
         const timeout = setTimeout(() => fetchModrinth(search), 300);
         return () => clearTimeout(timeout);
-    }, [search, fetchModrinth, fetchInstalled]);
+    }, [search, category, fetchModrinth, fetchInstalled]);
 
     const handleInstall = async (modId: string) => {
         setActionId(modId);
@@ -106,13 +107,17 @@ export default function ModBrowser({ serverId, gameType }: { serverId: string, g
                 <div className="flex flex-col md:flex-row gap-6 items-center justify-between">
                     <div className="space-y-1">
                         <h2 className="text-2xl font-black uppercase tracking-tighter italic">Discovery Engine</h2>
-                        <p className="text-[9px] font-bold text-gray-500 uppercase tracking-widest">Querying Modrinth Global Registry...</p>
+                        <div className="flex items-center gap-4 mt-2">
+                            <button onClick={() => setCategory("project_type:mod")} className={clsx("text-[8px] font-black uppercase tracking-widest px-3 py-1 rounded-full border transition-all", category === "project_type:mod" ? "bg-brand-purple border-brand-purple text-white" : "border-white/10 text-gray-500 hover:text-white")}>Mods</button>
+                            <button onClick={() => setCategory("project_type:plugin")} className={clsx("text-[8px] font-black uppercase tracking-widest px-3 py-1 rounded-full border transition-all", category === "project_type:plugin" ? "bg-brand-purple border-brand-purple text-white" : "border-white/10 text-gray-500 hover:text-white")}>Plugins</button>
+                            <button onClick={() => setCategory("project_type:datapack")} className={clsx("text-[8px] font-black uppercase tracking-widest px-3 py-1 rounded-full border transition-all", category === "project_type:datapack" ? "bg-brand-purple border-brand-purple text-white" : "border-white/10 text-gray-500 hover:text-white")}>Data Packs</button>
+                        </div>
                     </div>
                     <div className="relative w-full md:w-96">
                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
                         <input 
                             type="text"
-                            placeholder="Search modules..."
+                            placeholder="Search manifest..."
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                             className="w-full h-12 pl-12 pr-6 rounded-xl bg-white/5 border border-white/10 text-white font-bold text-sm focus:border-brand-purple outline-none transition-all"
