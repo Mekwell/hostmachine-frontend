@@ -1,4 +1,4 @@
-const API_URL = 'http://10.0.0.12:3000';
+const API_URL = process.env.CONTROLLER_API_URL || 'http://10.0.0.12:3000';
 const INTERNAL_SECRET = process.env.INTERNAL_API_SECRET || 'insecure-secret';
 
 console.log('>>> [API] Active Controller URL:', API_URL);
@@ -16,7 +16,7 @@ export async function internalFetch<T>(path: string, options: FetchOptions = {})
     ...options.headers,
   };
 
-  console.log(`>>> [Fetch] URL: ${url} | Secret Start: ${INTERNAL_SECRET.substring(0, 5)}...`);
+  console.log(`>>> [Fetch] URL: ${url}`);
 
   const config: RequestInit = {
     ...options,

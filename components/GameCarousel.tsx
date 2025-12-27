@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { useState } from "react";
@@ -54,23 +55,26 @@ export default function GameCarousel({ games }: { games: any[] }) {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {POPULAR_GAMES.map((game) => (
+            {POPULAR_GAMES.map((game, index) => (
                 <button 
                     key={game.id} 
                     onClick={() => setSelectedGame(game)}
                     className="group relative block aspect-[4/5] rounded-[2.5rem] transition-all duration-500 text-left w-full perspective-1000"
                 >
                     <div className="absolute inset-0 rounded-[2.5rem] glass-card border-white/5 group-hover:border-brand-purple/50 transition-all duration-500 overflow-hidden">
-                        <img 
-                            src={game.image} 
+                        <Image
+                            src={game.image}
                             alt={game.name}
-                            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-30 group-hover:opacity-40 blur-[2px] group-hover:blur-0"
+                            fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                            className="object-cover transition-transform duration-700 group-hover:scale-110 opacity-30 group-hover:opacity-40 blur-[2px] group-hover:blur-0"
+                            priority={index === 0}
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
-                        <div className={game.color + " absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"} />
+                        <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-t ${game.color}`} />
                     </div>
 
-                    {/* 3D Character Overlay */}
+                    {/* 3D Character Overlay - Using img for now as it's an external unpredictable asset, but wrapped safely */}
                     <div className="absolute inset-0 pointer-events-none overflow-visible">
                         <motion.img 
                             src={game.character}

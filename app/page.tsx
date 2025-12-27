@@ -1,14 +1,4 @@
 import Header from "@/components/Header";
-import Hero from "@/components/Hero";
-import GameCarousel from "@/components/GameCarousel";
-import MinecraftPromo from "@/components/MinecraftPromo";
-import OfferGrid from "@/components/OfferGrid";
-import HostingComparison from "@/components/HostingComparison";
-import FullGameGrid from "@/components/FullGameGrid";
-import SectionDivider from "@/components/SectionDivider";
-import { getGames } from "@/app/actions";
-
-export const dynamic = "force-dynamic";
 
 export default async function Home() {
   const games = await getGames();
