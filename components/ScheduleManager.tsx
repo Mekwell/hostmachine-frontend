@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import { Clock, Plus, Trash2, Calendar, Play, Save } from 'lucide-react';
+import { Clock, Plus, Trash2, Calendar, Play, Save, RefreshCw } from 'lucide-react';
 import { getSchedules, createSchedule, deleteSchedule } from '@/app/actions';
 import { clsx } from 'clsx';
 
