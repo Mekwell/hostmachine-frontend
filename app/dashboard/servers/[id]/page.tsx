@@ -5,7 +5,7 @@ import * as React from 'react';
 import {
     Terminal, Settings, HardDrive, Shield, Activity,
     Play, Square, RefreshCw, Trash2, Cpu, Database,
-    Globe, Lock, Info, Check, AlertCircle, Clock, ChevronRight
+    Globe, Lock, Info, Check, AlertCircle, Clock, ChevronRight, Moon, Sun
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { clsx } from 'clsx';
@@ -18,13 +18,15 @@ import ProFileManager from '@/components/ProFileManager';
 import PlayerList from '@/components/PlayerList';
 import UsageAnalytics from '@/components/UsageAnalytics';
 import ModBrowser from '@/components/ModBrowser';
+import ModpackBrowser from '@/components/ModpackBrowser';
+import ScheduleManager from '@/components/ScheduleManager';
 
 export default function ServerDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = React.use(params);
   const router = useRouter();
   const [server, setServer] = useState<any>(null);
   const [liveStats, setLiveStats] = useState<any>(null);
-  const [activeTab, setActiveTab] = useState<'console' | 'files' | 'config' | 'metrics' | 'players' | 'world' | 'mods'>('console');
+  const [activeTab, setActiveTab] = useState<'console' | 'files' | 'config' | 'metrics' | 'players' | 'world' | 'mods' | 'modpacks' | 'schedules'>('console');
   const [loadingAction, setLoadingAction] = useState<string | null>(null);
 
   useEffect(() => {
@@ -84,6 +86,7 @@ export default function ServerDetailPage({ params }: { params: Promise<{ id: str
   if (!server) return <div className="min-h-screen bg-[#05050A] flex items-center justify-center">Loading...</div>;
 
   const isProvisioning = server.status === 'PROVISIONING';
+  const isSleeping = server.status === 'SLEEPING';
   const isOnline = ['LIVE', 'STARTING', 'RUNNING'].includes(server.status);
   const isModdable = ['minecraft-forge', 'minecraft-fabric', 'minecraft-java'].includes(server.gameType);
   
@@ -111,7 +114,11 @@ export default function ServerDetailPage({ params }: { params: Promise<{ id: str
           </div>
 
           <div className="flex gap-3">
-            {!isOnline ? (
+            {isSleeping ? (
+                <button onClick={() => handleAction('start')} className="btn-primary !h-12 flex items-center gap-2">
+                    <Sun size={18} className="animate-pulse" /> WAKE SYSTEM
+                </button>
+            ) : !isOnline ? (
                 <button disabled={isProvisioning} onClick={() => handleAction('start')} className="btn-primary !h-12">Start</button>
             ) : (
                 <>
@@ -138,10 +145,12 @@ export default function ServerDetailPage({ params }: { params: Promise<{ id: str
                 <button onClick={() => setActiveTab('console')} className={clsx("px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all", activeTab === 'console' ? "bg-white/10 text-white" : "text-gray-500 hover:text-white")}>Console</button>
                 <button onClick={() => setActiveTab('players')} className={clsx("px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all", activeTab === 'players' ? "bg-white/10 text-white" : "text-gray-500 hover:text-white")}>Users</button>
                 {isModdable && <button onClick={() => setActiveTab('mods')} className={clsx("px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all", activeTab === 'mods' ? "bg-white/10 text-white" : "text-gray-500 hover:text-white")}>Mods</button>}
+                {isModdable && <button onClick={() => setActiveTab('modpacks')} className={clsx("px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all", activeTab === 'modpacks' ? "bg-white/10 text-white" : "text-gray-500 hover:text-white")}>Modpacks</button>}
                 <button onClick={() => setActiveTab('files')} className={clsx("px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all", activeTab === 'files' ? "bg-white/10 text-white" : "text-gray-500 hover:text-white")}>Files</button>
                 <button onClick={() => setActiveTab('world')} className={clsx("px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all", activeTab === 'world' ? "bg-white/10 text-white" : "text-gray-500 hover:text-white")}>World</button>
                 <button onClick={() => setActiveTab('metrics')} className={clsx("px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all", activeTab === 'metrics' ? "bg-white/10 text-white" : "text-gray-500 hover:text-white")}>Telemetry</button>
                 <button onClick={() => setActiveTab('config')} className={clsx("px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all", activeTab === 'config' ? "bg-white/10 text-white" : "text-gray-500 hover:text-white")}>Config</button>
+                <button onClick={() => setActiveTab('schedules')} className={clsx("px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all", activeTab === 'schedules' ? "bg-white/10 text-white" : "text-gray-500 hover:text-white")}>Automation</button>
             </div>
 
             <div className="glass-card min-h-[500px] relative overflow-hidden bg-black/20">
@@ -151,6 +160,14 @@ export default function ServerDetailPage({ params }: { params: Promise<{ id: str
 
                 {activeTab === 'mods' && (
                     <ModBrowser serverId={id} gameType={server.gameType} />
+                )}
+
+                {activeTab === 'modpacks' && (
+                    <ModpackBrowser serverId={id} />
+                )}
+
+                {activeTab === 'schedules' && (
+                    <ScheduleManager serverId={id} />
                 )}
 
                 {activeTab === 'players' && (

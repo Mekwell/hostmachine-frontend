@@ -8,6 +8,8 @@ import { getServers, getUserSubscriptions } from '@/app/actions';
 import { useAuth } from '@/lib/auth-context';
 import Link from 'next/link';
 import { clsx } from 'clsx';
+import HostBotWidget from '@/components/HostBotWidget';
+import { Moon } from 'lucide-react';
 
 export default function UserDashboard() {
   const { user } = useAuth();
@@ -34,8 +36,8 @@ export default function UserDashboard() {
             // In a real app, getServers() would filter by userId on the server side
             // For now, we filter here if needed, but assuming for this demo it returns user's servers
             const userServers = servers.filter(s => s.userId === user.id);
-            const activeServers = userServers.filter(s => s.status === 'RUNNING').length;
-            const usedRam = userServers.reduce((acc, s) => acc + (s.status === 'RUNNING' ? s.memoryLimitMb : 0), 0);
+            const activeServers = userServers.filter(s => ['RUNNING', 'LIVE', 'STARTING'].includes(s.status)).length;
+            const usedRam = userServers.reduce((acc, s) => acc + (['RUNNING', 'LIVE', 'STARTING'].includes(s.status) ? s.memoryLimitMb : 0), 0);
 
             const activeSub = subs.find(s => s.status === 'ACTIVE');
             
@@ -98,8 +100,11 @@ export default function UserDashboard() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Recent Servers List */}
-        <div className="lg:col-span-2 space-y-4">
-            <div className="flex items-center justify-between mb-2">
+        <div className="lg:col-span-2 space-y-6">
+            <HostBotWidget />
+            
+            <div className="space-y-4">
+                <div className="flex items-center justify-between mb-2">
                 <h2 className="text-xl font-bold text-white">Recent Modules</h2>
                 <Link href="/dashboard/servers" className="text-sm font-bold text-brand-blue hover:text-white transition-colors flex items-center gap-1 uppercase tracking-widest">
                     View All <ChevronRight size={14} />
@@ -117,9 +122,11 @@ export default function UserDashboard() {
                             <div className="flex items-center gap-4">
                                 <div className={clsx(
                                     "w-12 h-12 rounded-xl flex items-center justify-center text-white",
-                                    server.status === 'RUNNING' ? "bg-green-500/20 text-green-500" : "bg-gray-500/20 text-gray-500"
+                                    server.status === 'LIVE' || server.status === 'RUNNING' ? "bg-green-500/20 text-green-500" : 
+                                    server.status === 'SLEEPING' ? "bg-brand-blue/20 text-brand-blue" :
+                                    "bg-gray-500/20 text-gray-500"
                                 )}>
-                                    <Server size={24} />
+                                    {server.status === 'SLEEPING' ? <Moon size={24} /> : <Server size={24} />}
                                 </div>
                                 <div>
                                     <h3 className="font-bold text-white group-hover:text-brand-blue transition-colors">{server.name || 'Unnamed Module'}</h3>
@@ -130,7 +137,9 @@ export default function UserDashboard() {
                                 <div className="text-right hidden sm:block">
                                     <div className={clsx(
                                         "text-[10px] font-black uppercase tracking-[0.2em] mb-1",
-                                        server.status === 'RUNNING' ? "text-green-500" : "text-gray-500"
+                                        server.status === 'LIVE' || server.status === 'RUNNING' ? "text-green-500" : 
+                                        server.status === 'SLEEPING' ? "text-brand-blue" :
+                                        "text-gray-500"
                                     )}>
                                         {server.status}
                                     </div>
