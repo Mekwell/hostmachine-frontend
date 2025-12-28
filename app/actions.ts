@@ -198,6 +198,19 @@ export async function getMods(serverId: string) {
   }
 }
 
+export async function installMod(serverId: string, modId: string) {
+  return await internalFetch(`/mods/${serverId}/install`, {
+    method: 'POST',
+    data: { modId }
+  });
+}
+
+export async function uninstallMod(serverId: string, modId: string) {
+  return await internalFetch(`/mods/${serverId}/${modId}`, {
+    method: 'DELETE'
+  });
+}
+
 // --- Schedules ---
 export async function getSchedules(serverId: string) {
   try {

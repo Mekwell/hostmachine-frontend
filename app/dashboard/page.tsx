@@ -2,14 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import { 
-  Server, Shield, Cpu, Zap, Activity, Clock, Plus, ChevronRight
+  Server, Shield, Cpu, Zap, Activity, Clock, Plus, ChevronRight, Moon
 } from 'lucide-react';
 import { getServers, getUserSubscriptions } from '@/app/actions';
 import { useAuth } from '@/lib/auth-context';
 import Link from 'next/link';
 import { clsx } from 'clsx';
 import HostBotWidget from '@/components/HostBotWidget';
-import { Moon } from 'lucide-react';
 
 export default function UserDashboard() {
   const { user } = useAuth();
@@ -33,8 +32,6 @@ export default function UserDashboard() {
                 getUserSubscriptions(user.id) as Promise<any[]>
             ]);
 
-            // In a real app, getServers() would filter by userId on the server side
-            // For now, we filter here if needed, but assuming for this demo it returns user's servers
             const userServers = servers.filter(s => s.userId === user.id);
             const activeServers = userServers.filter(s => ['RUNNING', 'LIVE', 'STARTING'].includes(s.status)).length;
             const usedRam = userServers.reduce((acc, s) => acc + (['RUNNING', 'LIVE', 'STARTING'].includes(s.status) ? s.memoryLimitMb : 0), 0);
@@ -105,62 +102,63 @@ export default function UserDashboard() {
             
             <div className="space-y-4">
                 <div className="flex items-center justify-between mb-2">
-                <h2 className="text-xl font-bold text-white">Recent Modules</h2>
-                <Link href="/dashboard/servers" className="text-sm font-bold text-brand-blue hover:text-white transition-colors flex items-center gap-1 uppercase tracking-widest">
-                    View All <ChevronRight size={14} />
-                </Link>
-            </div>
-            
-            {recentServers.length > 0 ? (
-                <div className="space-y-3">
-                    {recentServers.map(server => (
-                        <Link 
-                            key={server.id} 
-                            href={`/dashboard/servers/${server.id}`}
-                            className="glass-card p-4 rounded-2xl flex items-center justify-between hover:border-brand-blue/30 transition-all group"
-                        >
-                            <div className="flex items-center gap-4">
-                                <div className={clsx(
-                                    "w-12 h-12 rounded-xl flex items-center justify-center text-white",
-                                    server.status === 'LIVE' || server.status === 'RUNNING' ? "bg-green-500/20 text-green-500" : 
-                                    server.status === 'SLEEPING' ? "bg-brand-blue/20 text-brand-blue" :
-                                    "bg-gray-500/20 text-gray-500"
-                                )}>
-                                    {server.status === 'SLEEPING' ? <Moon size={24} /> : <Server size={24} />}
-                                </div>
-                                <div>
-                                    <h3 className="font-bold text-white group-hover:text-brand-blue transition-colors">{server.name || 'Unnamed Module'}</h3>
-                                    <p className="text-xs text-gray-500 uppercase tracking-widest">{server.gameType} • {server.memoryLimitMb}MB RAM</p>
-                                </div>
-                            </div>
-                            <div className="flex items-center gap-6">
-                                <div className="text-right hidden sm:block">
-                                    <div className={clsx(
-                                        "text-[10px] font-black uppercase tracking-[0.2em] mb-1",
-                                        server.status === 'LIVE' || server.status === 'RUNNING' ? "text-green-500" : 
-                                        server.status === 'SLEEPING' ? "text-brand-blue" :
-                                        "text-gray-500"
-                                    )}>
-                                        {server.status}
-                                    </div>
-                                    <div className="text-[10px] text-gray-600 font-bold uppercase tracking-widest">Status</div>
-                                </div>
-                                <ChevronRight size={20} className="text-gray-700 group-hover:text-white transition-colors" />
-                            </div>
-                        </Link>
-                    ))}
-                </div>
-            ) : (
-                <div className="glass-card p-12 rounded-2xl text-center">
-                    <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-600">
-                        <Server size={32} />
-                    </div>
-                    <p className="text-gray-400 mb-6">You haven't deployed any modules yet.</p>
-                    <Link href="/servers/new" className="btn-primary !inline-flex">
-                        Deploy your first server
+                    <h2 className="text-xl font-bold text-white">Recent Modules</h2>
+                    <Link href="/dashboard/servers" className="text-sm font-bold text-brand-blue hover:text-white transition-colors flex items-center gap-1 uppercase tracking-widest">
+                        View All <ChevronRight size={14} />
                     </Link>
                 </div>
-            )}
+                
+                {recentServers.length > 0 ? (
+                    <div className="space-y-3">
+                        {recentServers.map(server => (
+                            <Link 
+                                key={server.id} 
+                                href={`/dashboard/servers/${server.id}`}
+                                className="glass-card p-4 rounded-2xl flex items-center justify-between hover:border-brand-blue/30 transition-all group"
+                            >
+                                <div className="flex items-center gap-4">
+                                    <div className={clsx(
+                                        "w-12 h-12 rounded-xl flex items-center justify-center text-white",
+                                        server.status === 'LIVE' || server.status === 'RUNNING' ? "bg-green-500/20 text-green-500" : 
+                                        server.status === 'SLEEPING' ? "bg-brand-blue/20 text-brand-blue" :
+                                        "bg-gray-500/20 text-gray-500"
+                                    )}>
+                                        {server.status === 'SLEEPING' ? <Moon size={24} /> : <Server size={24} />}
+                                    </div>
+                                    <div>
+                                        <h3 className="font-bold text-white group-hover:text-brand-blue transition-colors">{server.name || 'Unnamed Module'}</h3>
+                                        <p className="text-xs text-gray-500 uppercase tracking-widest">{server.gameType} • {server.memoryLimitMb}MB RAM</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-center gap-6">
+                                    <div className="text-right hidden sm:block">
+                                        <div className={clsx(
+                                            "text-[10px] font-black uppercase tracking-[0.2em] mb-1",
+                                            server.status === 'LIVE' || server.status === 'RUNNING' ? "text-green-500" : 
+                                            server.status === 'SLEEPING' ? "text-brand-blue" :
+                                            "text-gray-500"
+                                        )}>
+                                            {server.status}
+                                        </div>
+                                        <div className="text-[10px] text-gray-600 font-bold uppercase tracking-widest">Status</div>
+                                    </div>
+                                    <ChevronRight size={20} className="text-gray-700 group-hover:text-white transition-colors" />
+                                </div>
+                            </Link>
+                        ))}
+                    </div>
+                ) : (
+                    <div className="glass-card p-12 rounded-2xl text-center">
+                        <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-600">
+                            <Server size={32} />
+                        </div>
+                        <p className="text-gray-400 mb-6">You haven't deployed any modules yet.</p>
+                        <Link href="/servers/new" className="btn-primary !inline-flex">
+                            Deploy your first server
+                        </Link>
+                    </div>
+                )}
+            </div>
         </div>
 
         {/* Quick Actions / System Info */}
