@@ -6,12 +6,11 @@ const { chromium } = require('playwright');
   await page.setViewportSize({ width: 1920, height: 1080 });
   
   const pages = [
-    { name: 'home', url: 'http://10.0.0.12:3002' },
-    { name: 'store', url: 'http://10.0.0.12:3002/store' },
-    { name: 'login', url: 'http://10.0.0.12:3002/login' },
-    { name: 'signup', url: 'http://10.0.0.12:3002/signup' },
-    { name: 'new-server', url: 'http://10.0.0.12:3002/servers/new' }
-  ];
+    { name: 'home', url: 'http://192.168.30.20:3002' },
+    { name: 'store', url: 'http://192.168.30.20:3002/store' },
+    { name: 'login', url: 'http://192.168.30.20:3002/login' },
+    { name: 'signup', url: 'http://192.168.30.20:3002/signup' },
+    { name: 'new-server', url: 'http://192.168.30.20:3002/servers/new' }  ];
 
   for (const p of pages) {
     try {

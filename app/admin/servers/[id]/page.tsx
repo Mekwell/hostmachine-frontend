@@ -242,7 +242,7 @@ export default function ServerDetailPage({ params }: { params: Promise<{ id: str
             <div className="flex items-center gap-3 mt-1">
                 <p className="text-gray-400 text-xs font-mono">{server.id}</p>
                 <span className="text-gray-600">•</span>
-                <p className="text-brand-purple text-xs font-bold uppercase tracking-widest">{server.node?.vpnIp || '10.0.0.100'}:{server.port}</p>
+                <p className="text-brand-purple text-xs font-bold uppercase tracking-widest">{server.node?.vpnIp || '192.168.30.7'}:{server.port}</p>
                 <span className="text-gray-600">•</span>
                 <p className="text-gray-500 text-xs font-bold uppercase tracking-widest italic">{server.gameType}</p>
             </div>

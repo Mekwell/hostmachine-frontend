@@ -152,11 +152,11 @@ export default function UserServersPage() {
                     <td className="p-6">
                         <div className="flex flex-col gap-1">
                             <span className="font-mono text-xs font-bold text-white tracking-tighter hover:text-brand-blue transition-colors cursor-pointer" onClick={() => { 
-                                const addr = (server.subdomain || server.node?.publicIp || server.node?.vpnIp || '10.0.0.100') + ':' + server.port;
+                                const addr = (server.subdomain || server.node?.publicIp || server.node?.vpnIp || '192.168.30.7') + ':' + server.port;
                                 navigator.clipboard.writeText(addr); 
                                 alert('Endpoint copied!'); 
                             }}>
-                                {server.subdomain ? `${server.subdomain}:${server.port}` : `${server.node?.publicIp || server.node?.vpnIp || '10.0.0.100'}:${server.port}`}
+                                {server.subdomain ? `${server.subdomain}:${server.port}` : `${server.node?.publicIp || server.node?.vpnIp || '192.168.30.7'}:${server.port}`}
                             </span>
                             <div className="text-[8px] text-gray-600 font-black uppercase tracking-widest">Public Address</div>
                         </div>

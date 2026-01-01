@@ -11,8 +11,8 @@ echo ">>> Starting Hostmachine Frontend Setup..."
 
 # 1. Configuration
 APP_DIR="/opt/hostmachine-frontend"
-CONTROLLER_API_URL="http://10.0.0.12:3000" # Internal API URL (Server-side)
-NEXT_PUBLIC_API_URL="http://10.0.0.12:3000" # Public API URL (Client-side)
+CONTROLLER_API_URL="http://192.168.30.20:3000" # Internal API URL (Server-side)
+NEXT_PUBLIC_API_URL="http://192.168.30.20:3000" # Public API URL (Client-side)
 INTERNAL_SECRET="secret" # Matching the hardcoded secret for now
 
 # 2. Prepare Directory
@@ -56,4 +56,4 @@ pm2 start npm --name "hm-frontend" -- start -- -p 3001
 pm2 save
 
 echo ">>> Frontend Deployed Successfully!"
-echo "Access it at: http://10.0.0.12:3001"
+echo "Access it at: http://192.168.30.20:3001"
