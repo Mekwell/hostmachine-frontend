@@ -51,10 +51,11 @@ export default function ServerDetailPage({ params }: { params: Promise<{ id: str
   }, [server]);
 
   const handleAction = async (action: 'start' | 'stop' | 'restart' | 'delete') => {
+    if (loadingAction) return;
     setLoadingAction(action);
     try {
       if (action === 'delete') {
-        if (confirm('Are you sure?')) {
+        if (confirm(`Are you sure you want to permanently delete ${server.name}? This action cannot be undone.`)) {
           await deleteServer(id);
           router.push('/dashboard/servers');
         }
@@ -62,8 +63,10 @@ export default function ServerDetailPage({ params }: { params: Promise<{ id: str
           await startServer(id);
       } else if (action === 'stop') {
           await stopServer(id);
+          alert(`Server ${server.name} is stopping...`);
       } else if (action === 'restart') {
           await restartServer(id);
+          alert(`Server ${server.name} is restarting...`);
       }
     } catch (e) {
       alert('Action failed');
@@ -119,14 +122,22 @@ export default function ServerDetailPage({ params }: { params: Promise<{ id: str
                     <Sun size={18} className="animate-pulse" /> WAKE SYSTEM
                 </button>
             ) : !isOnline ? (
-                <button disabled={isProvisioning} onClick={() => handleAction('start')} className="btn-primary !h-12">Start</button>
+                <button disabled={isProvisioning || loadingAction === 'start'} onClick={() => handleAction('start')} className="btn-primary !h-12">
+                    {loadingAction === 'start' ? 'Starting...' : 'Start'}
+                </button>
             ) : (
                 <>
-                    <button onClick={() => handleAction('stop')} className="px-6 py-3 rounded-xl bg-red-600/20 text-red-500 border border-red-500/30">Stop</button>
-                    <button onClick={() => handleAction('restart')} className="px-6 py-3 rounded-xl bg-white/5 border border-white/10">Restart</button>
+                    <button disabled={loadingAction === 'stop'} onClick={() => handleAction('stop')} className="px-6 py-3 rounded-xl bg-red-600/20 text-red-500 border border-red-500/30 disabled:opacity-50">
+                        {loadingAction === 'stop' ? 'Stopping...' : 'Stop'}
+                    </button>
+                    <button disabled={loadingAction === 'restart'} onClick={() => handleAction('restart')} className="px-6 py-3 rounded-xl bg-white/5 border border-white/10 disabled:opacity-50">
+                        {loadingAction === 'restart' ? 'Restarting...' : 'Restart'}
+                    </button>
                 </>
             )}
-            <button onClick={() => handleAction('delete')} className="w-12 h-12 flex items-center justify-center rounded-xl bg-white/5 border border-white/10 text-gray-500"><Trash2 size={20} /></button>
+            <button disabled={loadingAction === 'delete'} onClick={() => handleAction('delete')} className="w-12 h-12 flex items-center justify-center rounded-xl bg-white/5 border border-white/10 text-gray-500 disabled:opacity-50">
+                {loadingAction === 'delete' ? <RefreshCw size={20} className="animate-spin" /> : <Trash2 size={20} />}
+            </button>
           </div>
         </div>
 
