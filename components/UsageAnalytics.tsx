@@ -8,21 +8,43 @@ export default function UsageAnalytics({ serverId }: { serverId: string }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchMetrics = async () => {
+        const fetchHistory = async () => {
             try {
-                // We'll call our new internal API
                 const res = await fetch(`/api/servers/${serverId}/metrics`);
                 const data = await res.json();
-                setMetrics(data.reverse()); // Show chronological
-            } catch (e) {
-                console.error('Failed to fetch telemetry history');
-            } finally {
-                setLoading(false);
-            }
+                setMetrics(data.reverse());
+            } catch (e) {}
         };
-        fetchMetrics();
-        const interval = setInterval(fetchMetrics, 30000); // Update every 30s
-        return () => clearInterval(interval);
+
+        const fetchLive = async () => {
+            try {
+                const res = await fetch(`/api/servers/${serverId}/metrics/live`);
+                const live = await res.json();
+                if (live.cpu !== undefined) {
+                    setMetrics(prev => {
+                        const newPoint = { 
+                            cpuUsage: live.cpu, 
+                            ramUsageMb: live.ram, 
+                            timestamp: live.timestamp 
+                        };
+                        const updated = [...prev, newPoint];
+                        return updated.slice(-60); // Keep last 60 points
+                    });
+                }
+            } catch (e) {}
+        };
+
+        fetchHistory().then(() => {
+            setLoading(false);
+        });
+
+        const liveInterval = setInterval(fetchLive, 2000); // 2s live updates
+        const historyInterval = setInterval(fetchHistory, 60000); // 1m history sync
+        
+        return () => {
+            clearInterval(liveInterval);
+            clearInterval(historyInterval);
+        };
     }, [serverId]);
 
     if (loading) return (

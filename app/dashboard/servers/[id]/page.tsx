@@ -141,6 +141,31 @@ export default function ServerDetailPage({ params }: { params: Promise<{ id: str
           </div>
         </div>
 
+        {(isProvisioning || server.status === 'STARTING') && (
+            <div className="glass-card p-8 border-brand-purple/30 bg-brand-purple/5 relative overflow-hidden">
+                <div className="absolute top-0 left-0 h-1 bg-brand-purple transition-all duration-1000" style={{ width: `${server.progress}%` }} />
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-3">
+                            <RefreshCw size={18} className="text-brand-purple animate-spin" />
+                            <h3 className="text-lg font-black uppercase italic tracking-tight">System Handshake in Progress</h3>
+                        </div>
+                        <p className="text-gray-400 text-sm font-medium">{server.statusMessage || 'Initializing deployment protocols...'}</p>
+                    </div>
+                    <div className="text-right">
+                        <span className="text-4xl font-black text-brand-purple italic tracking-tighter">{server.progress}%</span>
+                        <p className="text-[10px] font-black uppercase text-gray-600 tracking-widest mt-1">Completion Status</p>
+                    </div>
+                </div>
+                <div className="grid grid-cols-4 gap-4 mt-8">
+                    <StepItem label="Allocating" active={server.progress >= 5} done={server.progress > 20} />
+                    <StepItem label="Configuring" active={server.progress >= 20} done={server.progress > 40} />
+                    <StepItem label="Provisioning" active={server.progress >= 40} done={server.progress > 90} />
+                    <StepItem label="Finalizing" active={server.progress >= 90} done={server.progress === 100} />
+                </div>
+            </div>
+        )}
+
         <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-6">
             <StatCard label="CPU" value={`${liveStats?.cpu ?? server.cpuUsage}%`} icon={<Cpu size={20}/>} />
             <StatCard label="RAM" value={`${liveStats?.ram ?? server.ramUsage}MB`} icon={<Activity size={20}/>} />
@@ -246,6 +271,34 @@ function StatCard({ label, value, icon }: any) {
             <div>
                 <p className="text-[10px] font-black uppercase text-gray-500">{label}</p>
                 <h3 className="text-xl font-black text-white italic">{value}</h3>
+            </div>
+        </div>
+    );
+}
+
+function StepItem({ label, active, done }: { label: string, active: boolean, done: boolean }) {
+    return (
+        <div className="space-y-3">
+            <div className={clsx(
+                "h-1 rounded-full transition-all duration-500",
+                done ? "bg-brand-purple" : active ? "bg-brand-purple/40 animate-pulse" : "bg-white/5"
+            )} />
+            <div className="flex items-center gap-2">
+                {done ? (
+                    <div className="w-3 h-3 rounded-full bg-brand-purple flex items-center justify-center">
+                        <Check size={8} className="text-white" />
+                    </div>
+                ) : active ? (
+                    <div className="w-3 h-3 rounded-full border border-brand-purple/50 flex items-center justify-center">
+                        <div className="w-1.5 h-1.5 rounded-full bg-brand-purple animate-pulse" />
+                    </div>
+                ) : (
+                    <div className="w-3 h-3 rounded-full border border-white/10" />
+                )}
+                <span className={clsx(
+                    "text-[9px] font-black uppercase tracking-widest",
+                    done ? "text-white" : active ? "text-brand-purple" : "text-gray-600"
+                )}>{label}</span>
             </div>
         </div>
     );
