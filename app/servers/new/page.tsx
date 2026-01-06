@@ -6,7 +6,7 @@ import {
     Server, Cpu, Zap, Box, ShoppingBag, Gamepad2, 
     HardDrive, Check, ArrowRight, Layers,
     Globe, Rocket, Info, RefreshCw, Search,
-    Activity, Shield, ChevronLeft, Sparkles, Database, CreditCard, Plus
+    Activity, Shield, ChevronLeft, Sparkles, Database, CreditCard, Plus, Lock
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { clsx } from 'clsx';
@@ -42,6 +42,8 @@ function CreateServerWizard() {
   const [location, setLocation] = useState("");
   const [customImage, setCustomImage] = useState("");
   const [gameVars, setGameVars] = useState<Record<string, string>>({});
+  const [isPrivate, setIsPrivate] = useState(false);
+  const [serverPassword, setServerPassword] = useState("");
 
   useEffect(() => {
     Promise.all([
@@ -98,6 +100,12 @@ function CreateServerWizard() {
       // Format environment variables from gameVars
       const env = Object.entries(gameVars).map(([k, v]) => `${k}=${v}`);
       if (serverName) env.push(`SERVER_NAME=${serverName}`);
+      if (isPrivate && serverPassword) {
+          env.push(`PASSWORD=${serverPassword}`);
+          env.push(`PUBLIC=0`);
+      } else {
+          env.push(`PUBLIC=1`);
+      }
 
       const result: any = await deployServer(user.id, selectedGameId, ram, serverName, location, customImage, { env });
       if (result.status === 'provisioning') {
@@ -353,9 +361,12 @@ function CreateServerWizard() {
                                                     </div>
                                                     <span className="text-xl font-black text-white italic">${p.price}</span>
                                                 </div>
-                                                <p className="text-[9px] text-gray-500 uppercase font-black tracking-[0.2em] relative z-10">
-                                                    {p.ramMb / 1024}GB RAM // {p.cpuCores} vCPU CORES
-                                                </p>
+                                                <div className="flex items-center gap-2">
+                                                    <Zap size={12} className="text-brand-purple" />
+                                                    <p className="text-[9px] text-gray-400 uppercase font-black tracking-[0.2em] relative z-10">
+                                                        OPTIMIZED PERFORMANCE BUNDLE
+                                                    </p>
+                                                </div>
                                                 {selectedPlanId === p.id && <div className="absolute inset-0 bg-brand-purple/5 animate-pulse" />}
                                             </button>
                                         )) : (
@@ -395,20 +406,84 @@ function CreateServerWizard() {
 
                                 <div className="h-px bg-white/5" />
 
+                                {/* Privacy & Network Selection */}
+                                <div className="space-y-8">
+                                    <div className="flex items-center gap-3">
+                                        <h2 className="text-3xl font-black text-white uppercase tracking-tighter italic">2. <span className="text-gradient">Security.</span></h2>
+                                    </div>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl">
+                                        <div className="space-y-4">
+                                            <label className="text-[10px] font-black uppercase tracking-widest text-gray-600">Access Protocol</label>
+                                            <div className="flex bg-white/5 border border-white/10 rounded-2xl p-1 w-fit">
+                                                <button 
+                                                    onClick={() => setIsPrivate(false)}
+                                                    className={clsx(
+                                                        "px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2",
+                                                        !isPrivate ? "bg-white/10 text-white shadow-lg" : "text-gray-500 hover:text-white"
+                                                    )}
+                                                >
+                                                    <Globe size={14} /> Public
+                                                </button>
+                                                <button 
+                                                    onClick={() => setIsPrivate(true)}
+                                                    className={clsx(
+                                                        "px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2",
+                                                        isPrivate ? "bg-brand-purple text-white shadow-lg" : "text-gray-500 hover:text-white"
+                                                    )}
+                                                >
+                                                    <Lock size={14} /> Private
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <AnimatePresence>
+                                            {isPrivate && (
+                                                <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} className="space-y-3">
+                                                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-600">Server Password</label>
+                                                    <div className="relative">
+                                                        <Shield className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-purple" size={16} />
+                                                        <input 
+                                                            type="password" 
+                                                            value={serverPassword} 
+                                                            onChange={(e) => setServerPassword(e.target.value)} 
+                                                            placeholder="••••••••" 
+                                                            className="w-full h-14 pl-12 pr-6 rounded-xl bg-white/5 border border-brand-purple/30 text-white font-bold text-sm focus:border-brand-purple outline-none transition-all"
+                                                        />
+                                                    </div>
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
+                                    </div>
+                                </div>
+
+                                <div className="h-px bg-white/5" />
+
                                 {/* Game Specific Variables (Bottom) */}
                                 <div className="space-y-8">
-                                    <h2 className="text-3xl font-black text-white uppercase tracking-tighter italic">2. <span className="text-gradient">Parameters.</span></h2>
+                                    <h2 className="text-3xl font-black text-white uppercase tracking-tighter italic">3. <span className="text-gradient">Parameters.</span></h2>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl">
                                         {selectedGame?.variables?.map((v: any) => (
                                             <div key={v.envVar} className="space-y-3">
                                                 <label className="text-[10px] font-black uppercase tracking-widest text-gray-600">{v.name}</label>
-                                                <input 
-                                                    type="text" 
-                                                    placeholder={v.defaultValue}
-                                                    value={gameVars[v.envVar] || ''}
-                                                    onChange={(e) => setGameVars({...gameVars, [v.envVar]: e.target.value})}
-                                                    className="w-full h-12 px-6 rounded-xl bg-white/5 border border-white/10 text-white font-bold text-xs focus:border-brand-purple outline-none transition-all"
-                                                />
+                                                {v.type === 'enum' ? (
+                                                    <select 
+                                                        value={gameVars[v.envVar] || v.defaultValue}
+                                                        onChange={(e) => setGameVars({...gameVars, [v.envVar]: e.target.value})}
+                                                        className="w-full h-12 px-6 rounded-xl bg-white/5 border border-white/10 text-white font-bold text-xs focus:border-brand-purple outline-none transition-all appearance-none cursor-pointer"
+                                                    >
+                                                        {v.options?.map((opt: string) => (
+                                                            <option key={opt} value={opt} className="bg-[#0A0A1A]">{opt}</option>
+                                                        ))}
+                                                    </select>
+                                                ) : (
+                                                    <input 
+                                                        type="text" 
+                                                        placeholder={v.defaultValue}
+                                                        value={gameVars[v.envVar] || ''}
+                                                        onChange={(e) => setGameVars({...gameVars, [v.envVar]: e.target.value})}
+                                                        className="w-full h-12 px-6 rounded-xl bg-white/5 border border-white/10 text-white font-bold text-xs focus:border-brand-purple outline-none transition-all"
+                                                    />
+                                                )}
                                             </div>
                                         ))}
                                         {(!selectedGame?.variables || selectedGame.variables.length === 0) && (
