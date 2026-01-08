@@ -406,14 +406,7 @@ function CreateServerWizard() {
                                     <div className="max-w-xl">
                                         <div className="space-y-3">
                                             <label className="text-[10px] font-black uppercase tracking-widest text-gray-600">Host Name</label>
-                                            <input 
-                                                type="text" 
-                                                value={serverName} 
-                                                onChange={(e) => setServerName(e.target.value)} 
-                                                autoFocus
-                                                placeholder="omega-node" 
-                                                className="w-full h-16 px-8 rounded-2xl bg-white/5 border border-white/10 text-white text-xl font-black uppercase tracking-tighter focus:outline-none focus:border-brand-purple transition-all pointer-events-auto relative z-20"
-                                            />
+                                            <HostNameInput value={serverName} onChange={setServerName} />
                                             <p className="text-[9px] text-brand-purple uppercase font-black tracking-[0.2em] ml-1">Endpoint: {serverName.toLowerCase().replace(/[^a-z0-9]/g, '-') || 'name'}.hostmachine.com.au</p>
                                         </div>
                                     </div>
@@ -563,6 +556,29 @@ function ReviewRow({ label, value, highlight }: any) {
             <td className="p-6 text-[10px] font-bold text-gray-500 uppercase tracking-widest">{label}</td>
             <td className={clsx("p-6 text-sm font-black uppercase italic text-right", highlight ? "text-brand-purple text-xl" : "text-white")}>{value}</td>
         </tr>
+    );
+}
+
+function HostNameInput({ value, onChange }: { value: string, onChange: (val: string) => void }) {
+    const [localValue, setLocalValue] = useState(value);
+
+    // Sync with parent if it changes from outside
+    useEffect(() => {
+        setLocalValue(value);
+    }, [value]);
+
+    return (
+        <input 
+            type="text" 
+            value={localValue} 
+            onChange={(e) => {
+                setLocalValue(e.target.value);
+                onChange(e.target.value);
+            }} 
+            autoFocus
+            placeholder="omega-node" 
+            className="w-full h-16 px-8 rounded-2xl bg-white/5 border border-white/10 text-white text-xl font-black uppercase tracking-tighter focus:outline-none focus:border-brand-purple transition-all pointer-events-auto relative z-20"
+        />
     );
 }
 
