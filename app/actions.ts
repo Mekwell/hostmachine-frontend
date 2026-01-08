@@ -77,12 +77,12 @@ export async function getServer(id: string) {
   }
 }
 
-export async function deployServer(userId: string, gameId: string, memoryLimitMb: number, serverName: string, location?: string, customImage?: string, options?: { autoUpdate?: boolean, restartSchedule?: string, env?: string[] }) {
+export async function deployServer(userId: string, gameId: string, memoryLimitMb: number, serverName: string, location?: string, options?: { autoUpdate?: boolean, restartSchedule?: string, env?: string[] }) {
   const env = options?.env || [`SERVER_NAME=${serverName}`];
   // NOTE: Passing gameId as gameType because the controller expects it in that field for lookup
   const res = await internalFetch('/servers', {
     method: 'POST',
-    data: { userId, gameType: gameId, memoryLimitMb, env, location, customImage, ...options }
+    data: { userId, gameType: gameId, memoryLimitMb, env, location, ...options }
   });
   revalidatePath('/dashboard/servers');
   return res;

@@ -141,7 +141,7 @@ export default function ServerDetailPage({ params }: { params: Promise<{ id: str
           </div>
         </div>
 
-        {(isProvisioning || server.status === 'STARTING') && (
+        {(isProvisioning || server.status === 'STARTING') && server.status !== 'LIVE' && server.progress < 100 && (
             <div className="glass-card p-8 border-brand-purple/30 bg-brand-purple/5 relative overflow-hidden">
                 <div className="absolute top-0 left-0 h-1 bg-brand-purple transition-all duration-1000" style={{ width: `${server.progress}%` }} />
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">

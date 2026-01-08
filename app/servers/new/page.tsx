@@ -107,7 +107,7 @@ function CreateServerWizard() {
           env.push(`PUBLIC=1`);
       }
 
-      const result: any = await deployServer(user.id, selectedGameId, ram, serverName, location, customImage, { env });
+      const result: any = await deployServer(user.id, selectedGameId, ram, serverName, location, { env });
       if (result.status === 'provisioning') {
         router.push('/dashboard/servers');
       } else {
@@ -361,11 +361,19 @@ function CreateServerWizard() {
                                                     </div>
                                                     <span className="text-xl font-black text-white italic">${p.price}</span>
                                                 </div>
-                                                <div className="flex items-center gap-2">
-                                                    <Zap size={12} className="text-brand-purple" />
-                                                    <p className="text-[9px] text-gray-400 uppercase font-black tracking-[0.2em] relative z-10">
-                                                        OPTIMIZED PERFORMANCE BUNDLE
-                                                    </p>
+                                                <div className="flex flex-col gap-1 relative z-10">
+                                                    <div className="flex items-center gap-2">
+                                                        <Cpu size={10} className="text-brand-purple" />
+                                                        <p className="text-[9px] text-gray-400 uppercase font-black tracking-[0.1em]">
+                                                            {p.cpuCores} vCPU CORES
+                                                        </p>
+                                                    </div>
+                                                    <div className="flex items-center gap-2">
+                                                        <Database size={10} className="text-brand-blue" />
+                                                        <p className="text-[9px] text-gray-400 uppercase font-black tracking-[0.1em]">
+                                                            {p.ramMb / 1024}GB HIGH-SPEED RAM
+                                                        </p>
+                                                    </div>
                                                 </div>
                                                 {selectedPlanId === p.id && <div className="absolute inset-0 bg-brand-purple/5 animate-pulse" />}
                                             </button>

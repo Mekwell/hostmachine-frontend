@@ -1,4 +1,4 @@
-const API_URL = process.env.CONTROLLER_API_URL || 'http://192.168.30.20:3000';
+const API_URL = process.env.CONTROLLER_INTERNAL_URL || process.env.CONTROLLER_API_URL || 'http://192.168.30.20:3000';
 const INTERNAL_SECRET = process.env.INTERNAL_API_SECRET || 'insecure-secret';
 
 console.log('>>> [API] Active Controller URL:', API_URL);
