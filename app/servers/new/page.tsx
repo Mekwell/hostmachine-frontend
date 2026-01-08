@@ -406,7 +406,14 @@ function CreateServerWizard() {
                                     <div className="max-w-xl">
                                         <div className="space-y-3">
                                             <label className="text-[10px] font-black uppercase tracking-widest text-gray-600">Host Name</label>
-                                            <input type="text" value={serverName} onChange={(e) => setServerName(e.target.value)} placeholder="omega-node" className="w-full h-16 px-8 rounded-2xl bg-white/5 border border-white/10 text-white text-xl font-black uppercase tracking-tighter focus:outline-none focus:border-brand-purple transition-all"/>
+                                            <input 
+                                                type="text" 
+                                                value={serverName} 
+                                                onChange={(e) => setServerName(e.target.value)} 
+                                                autoFocus
+                                                placeholder="omega-node" 
+                                                className="w-full h-16 px-8 rounded-2xl bg-white/5 border border-white/10 text-white text-xl font-black uppercase tracking-tighter focus:outline-none focus:border-brand-purple transition-all pointer-events-auto relative z-20"
+                                            />
                                             <p className="text-[9px] text-brand-purple uppercase font-black tracking-[0.2em] ml-1">Endpoint: {serverName.toLowerCase().replace(/[^a-z0-9]/g, '-') || 'name'}.hostmachine.com.au</p>
                                         </div>
                                     </div>
@@ -455,7 +462,7 @@ function CreateServerWizard() {
                                                             value={serverPassword} 
                                                             onChange={(e) => setServerPassword(e.target.value)} 
                                                             placeholder="••••••••" 
-                                                            className="w-full h-14 pl-12 pr-6 rounded-xl bg-white/5 border border-brand-purple/30 text-white font-bold text-sm focus:border-brand-purple outline-none transition-all"
+                                                            className="w-full h-14 pl-12 pr-6 rounded-xl bg-white/5 border border-brand-purple/30 text-white font-bold text-sm focus:border-brand-purple outline-none transition-all pointer-events-auto relative z-20"
                                                         />
                                                     </div>
                                                 </motion.div>
@@ -477,7 +484,7 @@ function CreateServerWizard() {
                                                     <select 
                                                         value={gameVars[v.envVar] || v.defaultValue}
                                                         onChange={(e) => setGameVars({...gameVars, [v.envVar]: e.target.value})}
-                                                        className="w-full h-12 px-6 rounded-xl bg-white/5 border border-white/10 text-white font-bold text-xs focus:border-brand-purple outline-none transition-all appearance-none cursor-pointer"
+                                                        className="w-full h-12 px-6 rounded-xl bg-white/5 border border-white/10 text-white font-bold text-xs focus:border-brand-purple outline-none transition-all appearance-none cursor-pointer pointer-events-auto relative z-20"
                                                     >
                                                         {v.options?.map((opt: string) => (
                                                             <option key={opt} value={opt} className="bg-[#0A0A1A]">{opt}</option>
@@ -489,7 +496,7 @@ function CreateServerWizard() {
                                                         placeholder={v.defaultValue}
                                                         value={gameVars[v.envVar] || ''}
                                                         onChange={(e) => setGameVars({...gameVars, [v.envVar]: e.target.value})}
-                                                        className="w-full h-12 px-6 rounded-xl bg-white/5 border border-white/10 text-white font-bold text-xs focus:border-brand-purple outline-none transition-all"
+                                                        className="w-full h-12 px-6 rounded-xl bg-white/5 border border-white/10 text-white font-bold text-xs focus:border-brand-purple outline-none transition-all pointer-events-auto relative z-20"
                                                     />
                                                 )}
                                             </div>
