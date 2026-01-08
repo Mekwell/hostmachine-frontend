@@ -19,7 +19,7 @@ export default function StorePage() {
             { id: 'rust', name: 'Rust', category: 'Survival', image: 'https://images.unsplash.com/photo-1552820728-8b83bb6b773f?auto=format&fit=crop&q=80&w=600' },
             { id: 'cs2', name: 'CS2', category: 'Tactical', image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&q=80&w=600' },
             { id: 'palworld', name: 'Palworld', category: 'Survival', image: 'https://images.unsplash.com/photo-1552820728-8b83bb6b773f?auto=format&fit=crop&q=80&w=600' },
-            { id: 'ark-sa', name: 'ARK: Survival Ascended', category: 'Survival', image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80&w=600' },
+            { id: 'asa', name: 'ARK: Survival Ascended', category: 'Survival', image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80&w=600' },
             { id: 'project-zomboid', name: 'Project Zomboid', category: 'Hardcore', image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80&w=600' },
             { id: 'valheim', name: 'Valheim', category: 'Co-op', image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80&w=600' },
             { id: 'dayz', name: 'DayZ', category: 'Survival', image: 'https://images.unsplash.com/photo-1552820728-8b83bb6b773f?auto=format&fit=crop&q=80&w=600' },
